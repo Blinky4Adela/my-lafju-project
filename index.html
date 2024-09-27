@@ -10,15 +10,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0; /* Šedé pozadí */
+            background-color: #f0f0f0;
             font-size: 48px;
             color: #ff69b4;
             position: relative;
-            overflow: hidden; /* Zamezení přetékání */
+            overflow: hidden;
         }
 
         #heart {
-            font-size: 300px; /* Velikost srdíčka */
+            font-size: 100px;
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -41,49 +41,46 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 10; /* Před ostatními prvky */
-        }
-
-        .firework, .star, .kiss {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none; /* Zamezení interakce s částicemi */
+            z-index: 10;
         }
 
         .firework {
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 0, 0, 0) 70%);
-            width: 10px;
-            height: 10px;
-            animation: explode 1s forwards;
-        }
-
-        .star {
-            background: yellow;
-            width: 8px;
-            height: 8px;
-            animation: starAnimation 1s forwards;
-        }
-
-        .kiss {
-            background: red; /* Barva pusinky */
-            width: 15px;
-            height: 15px;
-            animation: kissAnimation 1s forwards;
+            position: absolute;
+            border-radius: 50%;
+            animation: explode 0.8s ease-out forwards;
         }
 
         @keyframes explode {
-            from { transform: scale(1); }
-            to { transform: scale(10); opacity: 0; }
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .star {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: yellow;
+            border-radius: 50%;
+            animation: starAnimation 1s infinite;
         }
 
         @keyframes starAnimation {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-200px); opacity: 0; }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        .kiss {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation: kissAnimation 1.5s infinite;
         }
 
         @keyframes kissAnimation {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-150px); opacity: 0; }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); }
         }
     </style>
 </head>
@@ -99,62 +96,53 @@
             heart.style.display = 'none'; // Skrýt srdce
             message.style.display = 'block'; // Zobrazit zprávu
             createFireworks();
+            createStars();
+            createKisses();
         });
 
         function createFireworks() {
             for (let i = 0; i < 30; i++) {
-                createFirework();
-                createStar();
-                createKiss();
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                firework.style.width = `${Math.random() * 20 + 10}px`;
+                firework.style.height = `${Math.random() * 20 + 10}px`;
+                firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                firework.style.left = `${Math.random() * window.innerWidth}px`;
+                firework.style.top = `${Math.random() * window.innerHeight}px`;
+                document.body.appendChild(firework);
+                
+                setTimeout(() => {
+                    firework.remove();
+                }, 800);
             }
         }
 
-        function createFirework() {
-            const firework = document.createElement('div');
-            firework.classList.add('firework');
-            document.body.appendChild(firework);
-
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-
-            firework.style.left = `${x}px`;
-            firework.style.top = `${y}px`;
-
-            setTimeout(() => {
-                firework.remove();
-            }, 1000);
+        function createStars() {
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * window.innerWidth}px`;
+                star.style.top = `${Math.random() * window.innerHeight}px`;
+                document.body.appendChild(star);
+                
+                setTimeout(() => {
+                    star.remove();
+                }, 1000);
+            }
         }
 
-        function createStar() {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            document.body.appendChild(star);
-
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-
-            star.style.left = `${x}px`;
-            star.style.top = `${y}px`;
-
-            setTimeout(() => {
-                star.remove();
-            }, 1000);
-        }
-
-        function createKiss() {
-            const kiss = document.createElement('div');
-            kiss.classList.add('kiss');
-            document.body.appendChild(kiss);
-
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-
-            kiss.style.left = `${x}px`;
-            kiss.style.top = `${y}px`;
-
-            setTimeout(() => {
-                kiss.remove();
-            }, 1000);
+        function createKisses() {
+            for (let i = 0; i < 10; i++) {
+                const kiss = document.createElement('div');
+                kiss.classList.add('kiss');
+                kiss.style.left = `${Math.random() * window.innerWidth}px`;
+                kiss.style.top = `${window.innerHeight}px`; // začíná dole
+                document.body.appendChild(kiss);
+                
+                setTimeout(() => {
+                    kiss.remove();
+                }, 1500);
+            }
         }
     </script>
 </body>
