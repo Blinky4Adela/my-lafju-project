@@ -14,6 +14,7 @@
             font-size: 48px;
             color: #ff69b4;
             position: relative;
+            overflow: hidden; /* Aby se předešlo posunutí, když pusinky lítají */
         }
 
         #heart {
@@ -119,35 +120,4 @@
   
                 particle.style.left = `${x}px`;
                 particle.style.top = `${y}px`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-  
-                setTimeout(() => {
-                    particle.remove();
-                }, 1000);
-            }
-  
-            setTimeout(() => {
-                fireworkContainer.remove();
-            }, 1000);
-        }
-
-        function createKisses() {
-            for (let i = 0; i < 10; i++) {
-                const kiss = document.createElement('div');
-                kiss.classList.add('kiss');
-                kiss.textContent = '😘'; // Emoji pusinky
-                kiss.style.left = '50%';
-                kiss.style.top = '50%';
-                kiss.style.transform = 'translate(-50%, -50%)'; // Start od středu
-                kiss.style.animationDuration = `${Math.random() * 2 + 2}s`; // Náhodná doba animace
-                document.body.appendChild(kiss);
-
-                setTimeout(() => {
-                    kiss.remove();
-                }, 3000); // Po 3 sekundách se odstraní
-            }
-        }
-    </script>
-</body>
-</html>
+                particle.style.width = `${siz
