@@ -10,7 +10,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffebcd; /* Jemnější barva pozadí */
+            background-color: #f0f0f0; /* Šedá barva pozadí */
             font-size: 48px;
             color: #ff69b4;
             position: relative;
@@ -55,22 +55,7 @@
 
         .particle {
             position: absolute;
-            background-color: yellow; /* Barva hvězdiček */
             border-radius: 50%;
-        }
-
-        .star {
-            position: absolute;
-            background-color: yellow; /* Barva hvězdiček */
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            animation: twinkle 1s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
         }
     </style>
 </head>
@@ -100,32 +85,16 @@
 
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 20 + 10; // Větší částice
+                const size = Math.random() * 20 + 10; // Velikost částic 10-30px
 
                 particle.style.left = `${x}px`;
                 particle.style.top = `${y}px`;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
+                particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Náhodná barva
 
                 setTimeout(() => {
                     particle.remove();
-                }, 1000);
-            }
-
-            // Přidání hvězdiček
-            for (let j = 0; j < 10; j++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                fireworkContainer.appendChild(star);
-
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-
-                star.style.left = `${x}px`;
-                star.style.top = `${y}px`;
-
-                setTimeout(() => {
-                    star.remove();
                 }, 1000);
             }
 
