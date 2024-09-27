@@ -71,6 +71,22 @@
             }
         }
 
+        .star {
+            position: absolute;
+            width: 10px; /* Velikost hvězdy */
+            height: 10px; /* Velikost hvězdy */
+            background-color: yellow; /* Barva hvězdy */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0.8;
+            animation: twinkle 1s ease-in-out forwards;
+        }
+
+        @keyframes twinkle {
+            0% { transform: scale(1); opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .flying-heart {
             position: absolute;
             font-size: 30px; /* Velikost srdíček */
@@ -101,6 +117,7 @@
             message.style.display = 'block'; // Zobrazit zprávu
             createFireworks();
             createFlyingHearts();
+            createStars(); // Přidání hvězd
         });
 
         function createFireworks() {
@@ -108,14 +125,14 @@
             fireworkContainer.classList.add('fireworks');
             document.body.appendChild(fireworkContainer);
   
-            for (let i = 0; i < 50; i++) { // Zvětšení počtu částic
+            for (let i = 0; i < 80; i++) { // Zvětšení počtu částic
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 fireworkContainer.appendChild(particle);
   
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 15 + 10; // Zvětšení velikosti částic
+                const size = Math.random() * 20 + 10; // Zvětšení velikosti částic
                 const colors = ['#ff69b4', '#ff4500', '#00bfff', '#32cd32', '#ffd700']; // Různé barvy
 
                 particle.style.left = `${x}px`;
@@ -132,6 +149,25 @@
             setTimeout(() => {
                 fireworkContainer.remove();
             }, 1000);
+        }
+
+        function createStars() {
+            for (let i = 0; i < 30; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+
+                document.body.appendChild(star);
+
+                setTimeout(() => {
+                    star.remove();
+                }, 1000);
+            }
         }
 
         function createFlyingHearts() {
