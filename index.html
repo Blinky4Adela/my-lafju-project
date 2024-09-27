@@ -10,15 +10,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #ffeb3b; /* Nová barva pozadí */
             font-size: 48px;
             color: #ff69b4;
             position: relative;
-            overflow: hidden; /* Abychom se vyhnuli posouvání stránky při ohňostrojích */
+            overflow: hidden; /* Aby se hvězdy nezobrazovaly mimo obrazovku */
         }
 
         #heart {
-            font-size: 100px;
+            font-size: 250px; /* Zvětšení pulzujícího srdíčka */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -35,18 +35,59 @@
 
         #message {
             display: none;
-            font-size: 48px;
+            font-size: 60px; /* Větší text pro zprávu */
             color: #ff69b4;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            text-shadow: 2px 2px 5px #fff; /* Stín pro nápis */
         }
 
-        .firework {
+        .fireworks {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Aby bylo možné klikat na srdce i přes ohňostroje */
+        }
+
+        .particle {
+            position: absolute;
+            background: yellow;
             border-radius: 50%;
-            pointer-events: none; /* Abychom mohli klikat na srdce */
+            opacity: 0.8;
+            animation: explode 1s forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .star {
+            position: absolute;
+            background: yellow;
+            width: 15px; /* Velikost hvězdiček */
+            height: 15px; /* Velikost hvězdiček */
+            border-radius: 50%;
+            animation: twinkle 1s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
         }
     </style>
 </head>
@@ -65,74 +106,49 @@
         });
 
         function createFireworks() {
-            for (let i = 0; i < 10; i++) {
-                createSingleFirework();
+            const fireworkContainer = document.createElement('div');
+            fireworkContainer.classList.add('fireworks');
+            document.body.appendChild(fireworkContainer);
+          
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                fireworkContainer.appendChild(particle);
+  
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const size = Math.random() * 20 + 15; // Větší velikost částic
+  
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+  
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
             }
-        }
 
-        function createSingleFirework() {
-            const firework = document.createElement('div');
-            firework.classList.add('firework');
-            document.body.appendChild(firework);
-
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            const size = Math.random() * 50 + 20;
-
-            firework.style.width = `${size}px`;
-            firework.style.height = `${size}px`;
-            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            firework.style.left = `${x}px`;
-            firework.style.top = `${y}px`;
-
-            // Animace pro ohňostroj
-            firework.animate([
-                { transform: 'scale(1)', opacity: 1 },
-                { transform: 'scale(2)', opacity: 0 },
-            ], {
-                duration: 1000,
-                easing: 'ease-out',
-                fill: 'forwards'
-            });
-
-            // Vytvoření hvězdiček
-            createStars(x + size / 2, y + size / 2);
-            setTimeout(() => {
-                firework.remove();
-            }, 1000);
-        }
-
-        function createStars(x, y) {
-            for (let i = 0; i < 20; i++) {
+            // Přidání hvězdiček
+            for (let j = 0; j < 20; j++) {
                 const star = document.createElement('div');
-                star.classList.add('firework');
-                star.style.position = 'absolute';
-                star.style.borderRadius = '50%';
-                star.style.width = '5px';
-                star.style.height = '5px';
-                star.style.backgroundColor = '#ff69b4';
+                star.classList.add('star');
+                fireworkContainer.appendChild(star);
+                
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+
                 star.style.left = `${x}px`;
                 star.style.top = `${y}px`;
 
-                const angle = Math.random() * 2 * Math.PI;
-                const distance = Math.random() * 100;
-                const starX = x + Math.cos(angle) * distance;
-                const starY = y + Math.sin(angle) * distance;
-
-                document.body.appendChild(star);
-                star.animate([
-                    { transform: `translate(0, 0)`, opacity: 1 },
-                    { transform: `translate(${starX - x}px, ${starY - y}px)`, opacity: 0 },
-                ], {
-                    duration: 800,
-                    easing: 'ease-out',
-                    fill: 'forwards'
-                });
-
                 setTimeout(() => {
                     star.remove();
-                }, 800);
+                }, 1000);
             }
+          
+            setTimeout(() => {
+                fireworkContainer.remove();
+            }, 1000);
         }
     </script>
 </body>
