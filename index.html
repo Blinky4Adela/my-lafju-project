@@ -10,15 +10,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0; /* Šedá barva pozadí */
+            background-color: #f0f0f0; /* Šedé pozadí */
             font-size: 48px;
             color: #ff69b4;
             position: relative;
-            overflow: hidden; /* Aby se efekt ohňostroje nevešel do scrollovacího okna */
+            overflow: hidden; /* Zamezení přetékání */
         }
 
         #heart {
-            font-size: 300px; /* Větší srdce */
+            font-size: 300px; /* Velikost srdíčka */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -29,53 +29,61 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
 
         #message {
             display: none;
-            font-size: 64px; /* Větší nápis */
+            font-size: 48px;
             color: #ff69b4;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Silnější stín pro lepší viditelnost */
-            animation: fadeIn 1s forwards; /* Fade-in efekt */
+            z-index: 10; /* Před ostatními prvky */
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fireworks {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Aby bylo možné klikat na srdce i během ohňostroje */
-        }
-
-        .particle, .star, .kiss {
+        .firework, .star, .kiss {
             position: absolute;
             border-radius: 50%;
-            animation: explode 1s forwards; /* Přidání animace pro explodování */
+            pointer-events: none; /* Zamezení interakce s částicemi */
+        }
+
+        .firework {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 0, 0, 0) 70%);
+            width: 10px;
+            height: 10px;
+            animation: explode 1s forwards;
+        }
+
+        .star {
+            background: yellow;
+            width: 8px;
+            height: 8px;
+            animation: starAnimation 1s forwards;
+        }
+
+        .kiss {
+            background: red; /* Barva pusinky */
+            width: 15px;
+            height: 15px;
+            animation: kissAnimation 1s forwards;
         }
 
         @keyframes explode {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1);
-            }
-            100% {
-                opacity: 0; /* Po skončení animace zmizí */
-            }
+            from { transform: scale(1); }
+            to { transform: scale(10); opacity: 0; }
+        }
+
+        @keyframes starAnimation {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-200px); opacity: 0; }
+        }
+
+        @keyframes kissAnimation {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-150px); opacity: 0; }
         }
     </style>
 </head>
@@ -94,75 +102,58 @@
         });
 
         function createFireworks() {
-            const fireworkContainer = document.createElement('div');
-            fireworkContainer.classList.add('fireworks');
-            document.body.appendChild(fireworkContainer);
-
-            for (let i = 0; i < 50; i++) { // Větší počet částic pro lepší efekt
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                fireworkContainer.appendChild(particle);
-
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 30 + 10; // Velikost částic 10-40px
-
-                particle.style.left = `${x}px`;
-                particle.style.top = `${y}px`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Náhodná barva
-
-                setTimeout(() => {
-                    particle.remove();
-                }, 1000);
-            }
-
-            // Přidání hvězdiček
             for (let i = 0; i < 30; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                fireworkContainer.appendChild(star);
-
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 25 + 10; // Velikost hvězdiček 10-35px
-
-                star.style.left = `${x}px`;
-                star.style.top = `${y}px`;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.backgroundColor = 'yellow'; // Žlutá barva pro hvězdičky
-                star.style.boxShadow = '0 0 10px yellow'; // Efekt svícení
-
-                setTimeout(() => {
-                    star.remove();
-                }, 1000);
+                createFirework();
+                createStar();
+                createKiss();
             }
+        }
 
-            // Přidání červených pusinek
-            for (let i = 0; i < 20; i++) {
-                const kiss = document.createElement('div');
-                kiss.classList.add('kiss');
-                fireworkContainer.appendChild(kiss);
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            document.body.appendChild(firework);
 
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 20 + 5; // Velikost pusinek 5-25px
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
 
-                kiss.style.left = `${x}px`;
-                kiss.style.top = `${y}px`;
-                kiss.style.width = `${size}px`;
-                kiss.style.height = `${size}px`;
-                kiss.style.backgroundColor = 'red'; // Červená barva pro pusinky
-
-                setTimeout(() => {
-                    kiss.remove();
-                }, 1000);
-            }
+            firework.style.left = `${x}px`;
+            firework.style.top = `${y}px`;
 
             setTimeout(() => {
-                fireworkContainer.remove();
+                firework.remove();
+            }, 1000);
+        }
+
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            document.body.appendChild(star);
+
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
+
+            setTimeout(() => {
+                star.remove();
+            }, 1000);
+        }
+
+        function createKiss() {
+            const kiss = document.createElement('div');
+            kiss.classList.add('kiss');
+            document.body.appendChild(kiss);
+
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+
+            kiss.style.left = `${x}px`;
+            kiss.style.top = `${y}px`;
+
+            setTimeout(() => {
+                kiss.remove();
             }, 1000);
         }
     </script>
