@@ -10,15 +10,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffeb3b; /* Nová barva pozadí */
+            background-color: #ffebcd; /* Jemnější barva pozadí */
             font-size: 48px;
             color: #ff69b4;
             position: relative;
-            overflow: hidden; /* Aby se hvězdy nezobrazovaly mimo obrazovku */
+            overflow: hidden; /* Aby se efekt ohňostroje nevešel do scrollovacího okna */
         }
 
         #heart {
-            font-size: 250px; /* Zvětšení pulzujícího srdíčka */
+            font-size: 300px; /* Větší srdce */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -29,19 +29,19 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
         #message {
             display: none;
-            font-size: 60px; /* Větší text pro zprávu */
+            font-size: 64px; /* Větší nápis */
             color: #ff69b4;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-shadow: 2px 2px 5px #fff; /* Stín pro nápis */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Stín pro lepší viditelnost */
         }
 
         .fireworks {
@@ -50,44 +50,27 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Aby bylo možné klikat na srdce i přes ohňostroje */
+            pointer-events: none; /* Aby bylo možné klikat na srdce i během ohňostroje */
         }
 
         .particle {
             position: absolute;
-            background: yellow;
+            background-color: yellow; /* Barva hvězdiček */
             border-radius: 50%;
-            opacity: 0.8;
-            animation: explode 1s forwards;
-        }
-
-        @keyframes explode {
-            0% {
-                transform: scale(0);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 0;
-            }
         }
 
         .star {
             position: absolute;
-            background: yellow;
-            width: 15px; /* Velikost hvězdiček */
-            height: 15px; /* Velikost hvězdiček */
+            background-color: yellow; /* Barva hvězdiček */
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            animation: twinkle 1s infinite alternate;
+            animation: twinkle 1s infinite;
         }
 
         @keyframes twinkle {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
     </style>
 </head>
@@ -109,32 +92,32 @@
             const fireworkContainer = document.createElement('div');
             fireworkContainer.classList.add('fireworks');
             document.body.appendChild(fireworkContainer);
-          
+
             for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 fireworkContainer.appendChild(particle);
-  
+
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 20 + 15; // Větší velikost částic
-  
+                const size = Math.random() * 20 + 10; // Větší částice
+
                 particle.style.left = `${x}px`;
                 particle.style.top = `${y}px`;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-  
+
                 setTimeout(() => {
                     particle.remove();
                 }, 1000);
             }
 
             // Přidání hvězdiček
-            for (let j = 0; j < 20; j++) {
+            for (let j = 0; j < 10; j++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 fireworkContainer.appendChild(star);
-                
+
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
 
@@ -145,7 +128,7 @@
                     star.remove();
                 }, 1000);
             }
-          
+
             setTimeout(() => {
                 fireworkContainer.remove();
             }, 1000);
