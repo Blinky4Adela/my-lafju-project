@@ -41,7 +41,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Stín pro lepší viditelnost */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Silnější stín pro lepší viditelnost */
+            animation: fadeIn 1s forwards; /* Fade-in efekt */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .fireworks {
@@ -56,6 +62,20 @@
         .particle {
             position: absolute;
             border-radius: 50%;
+            animation: explode 1s forwards; /* Přidání animace pro explodování */
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0; /* Po skončení animace zmizí */
+            }
         }
     </style>
 </head>
@@ -78,20 +98,26 @@
             fireworkContainer.classList.add('fireworks');
             document.body.appendChild(fireworkContainer);
 
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 50; i++) { // Větší počet částic pro lepší efekt
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 fireworkContainer.appendChild(particle);
 
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
-                const size = Math.random() * 20 + 10; // Velikost částic 10-30px
+                const size = Math.random() * 30 + 10; // Velikost částic 10-40px
 
                 particle.style.left = `${x}px`;
                 particle.style.top = `${y}px`;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Náhodná barva
+
+                // Přidání animace, aby se částice pohybovaly ven
+                particle.style.transform = `translate(-50%, -50%) scale(0)`;
+                setTimeout(() => {
+                    particle.style.transform = `translate(-50%, -50%) scale(1)`; // Start animace
+                }, 0);
 
                 setTimeout(() => {
                     particle.remove();
