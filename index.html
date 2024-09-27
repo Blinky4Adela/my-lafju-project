@@ -10,14 +10,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0; /* Šedé pozadí */
+            background-color: #f0f0f0;
             font-size: 48px;
+            color: #ff69b4;
             position: relative;
-            overflow: hidden; /* Skryje přetečení */
         }
 
         #heart {
-            font-size: 200px; /* Velké pulzující srdce */
+            font-size: 150px; /* Zvětšení velikosti srdce */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -34,7 +34,7 @@
 
         #message {
             display: none;
-            font-size: 64px; /* Větší nápis */
+            font-size: 64px; /* Zvětšení velikosti nápisu */
             color: #ff69b4;
             position: absolute;
             top: 50%;
@@ -42,36 +42,47 @@
             transform: translate(-50%, -50%);
         }
 
-        .kiss {
-            position: absolute;
-            font-size: 40px; /* Velikost pusinek */
-            animation: fly 5s forwards;
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        @keyframes fly {
-            0% {
-                transform: translateY(100%);
-                opacity: 1;
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #ff69b4;
+            opacity: 0.8;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            from {
+                transform: scale(1);
             }
-            100% {
-                transform: translateY(-100vh);
+            to {
+                transform: scale(0);
                 opacity: 0;
             }
         }
 
-        .heart {
+        .kiss {
             position: absolute;
-            font-size: 30px; /* Velikost srdíček */
-            animation: heart-fly 4s forwards;
+            font-size: 40px; /* Velikost pusinek */
+            animation: fly 3s forwards;
         }
 
-        @keyframes heart-fly {
+        @keyframes fly {
             0% {
-                transform: translateY(100%);
+                transform: translate(0, 0);
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh);
+                transform: translate(calc(200px * (Math.random() < 0.5 ? -1 : 1)), calc(200px * (Math.random() < 0.5 ? -1 : 1)));
                 opacity: 0;
             }
         }
@@ -88,23 +99,37 @@
         heart.addEventListener('click', () => {
             heart.style.display = 'none'; // Skrýt srdce
             message.style.display = 'block'; // Zobrazit zprávu
-            createHearts(); // Spustit funkci pro létající srdíčka
+            createFireworks();
             createKisses(); // Spustit funkci pro pusinky
         });
 
-        function createHearts() {
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.textContent = '❤️';
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.animationDuration = `${Math.random() * 2 + 3}s`; // Náhodná doba animace
-                document.body.appendChild(heart);
-
+        function createFireworks() {
+            const fireworkContainer = document.createElement('div');
+            fireworkContainer.classList.add('fireworks');
+            document.body.appendChild(fireworkContainer);
+  
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                fireworkContainer.appendChild(particle);
+  
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const size = Math.random() * 10 + 5;
+  
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+  
                 setTimeout(() => {
-                    heart.remove();
-                }, 5000); // Po 5 sekundách se odstraní
+                    particle.remove();
+                }, 1000);
             }
+  
+            setTimeout(() => {
+                fireworkContainer.remove();
+            }, 1000);
         }
 
         function createKisses() {
@@ -112,14 +137,15 @@
                 const kiss = document.createElement('div');
                 kiss.classList.add('kiss');
                 kiss.textContent = '😘'; // Emoji pusinky
-                kiss.style.left = `${Math.random() * 100}vw`;
-                kiss.style.bottom = '0'; // Začíná odspodu
-                kiss.style.animationDuration = `${Math.random() * 3 + 2}s`; // Náhodná doba animace
+                kiss.style.left = '50%';
+                kiss.style.top = '50%';
+                kiss.style.transform = 'translate(-50%, -50%)'; // Start od středu
+                kiss.style.animationDuration = `${Math.random() * 2 + 2}s`; // Náhodná doba animace
                 document.body.appendChild(kiss);
 
                 setTimeout(() => {
                     kiss.remove();
-                }, 5000); // Po 5 sekundách se odstraní
+                }, 3000); // Po 3 sekundách se odstraní
             }
         }
     </script>
