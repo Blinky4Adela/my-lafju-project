@@ -13,10 +13,53 @@
             background-color: #f0f0f0;
             font-size: 48px;
             color: #ff69b4;
+            position: relative;
+        }
+
+        #heart {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #heart:hover {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        #message {
+            display: none;
+            font-size: 48px;
+            color: #ff69b4;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
 <body>
-    Laf jůů
+    <div id="heart">❤️</div>
+    <div id="message">I love you so much!</div>
+
+    <script>
+        const heart = document.getElementById('heart');
+        const message = document.getElementById('message');
+
+        heart.addEventListener('click', () => {
+            heart.style.display = 'none'; // Skrýt srdce
+            message.style.display = 'block'; // Zobrazit zprávu
+            createFireworks();
+        });
+
+        function createFireworks() {
+            alert("Tady by měly být ohňostroje!"); // Prozatím upozornění
+        }
+    </script>
 </body>
 </html>
